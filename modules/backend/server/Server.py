@@ -2,10 +2,12 @@ import json
 import os
 import socket
 from datetime import datetime
-
+from openai import OpenAI
+from dotenv import load_dotenv
 from httplib2 import Response
 from requests import Request
 from ServerToDatabase import DatabaseAccess
+from ServerToOpenAI import VocabAI
 
 script_path = os.path.abspath(__file__)
 server_dir_path = os.path.dirname(script_path)
@@ -13,6 +15,12 @@ database_dir_path = os.path.dirname(server_dir_path) + "/database"
 print("Server program location: ", script_path)
 print("The server module is located in: ", server_dir_path)
 print("The database module is located in: ", database_dir_path)
+
+# Load environment variables from the .env file in the same directory
+load_dotenv(dotenv_path=".env")
+
+# Access the API key
+api_key = os.getenv("OPENAI_API_KEY")
 
 
 class Server:
@@ -37,22 +45,34 @@ class Server:
         self.username = ""
         self.debugMode = debug_mode
 
+    """
+    parse, compose, recv, and send are conventional socket programming methods. 
+    """
     def parse_request(self, data):
-        lines = data.split("\r\n")
-        request_line = lines[0].split(" ")
-        self.Request["Method"], self.Request["URI"], self.Request["Version"] = (
-            request_line
-        )
+        try:
+            lines = data.split("\r\n")
+            request_line = lines[0].split(" ")
+            self.Request["Method"], self.Request["URI"], self.Request["Version"] = (
+                request_line
+            )
 
-        headers = lines[1:-2]  # Skip the request line and the last line (body)
-        for header in headers:
-            key, value = header.split(": ")
-            self.Request["Headers"][key] = value
+            headers = lines[1:-2]  # Skip the request line and the last line (body)
+            for header in headers:
+                key, value = header.split(": ")
+                self.Request["Headers"][key] = value
 
-        self.Request["Body"] = lines[-1]
+            self.Request["Body"] = lines[-1]
 
-        if self.debugMode:
-            print(datetime.now(), " - Parsed Request:\n\n", self.Request)
+            if self.debugMode:
+                print(datetime.now(), " - Parsed Request:\n\n", self.Request)
+        except Exception:
+            self.Request = {
+                "Method": None,
+                "URI": None,
+                "Version": None,
+                "Headers": {},
+                "Body": None,
+            }
 
     def compose_response(self):
         response = (
@@ -85,7 +105,10 @@ class Server:
     def send_response(self):
         response = self.compose_response()
         self.socket.sendall(response.encode("utf-8"))
-
+        
+    """
+    retrieve functions pull data from external APIs, and will not change data in Database.
+    """
     def retrieve_data(self):
         """
         Getter function for all database access. May consist sensitive data. Will not alter database.
@@ -99,7 +122,7 @@ class Server:
                 self.username = username
             else:
                 self.Response["Body"] = "User already in session"
-                
+
         elif target_db == "/progress":  # get user learned words
             self.username = self.Request["Headers"]["Username"]
 
@@ -109,13 +132,26 @@ class Server:
                 self.retrieve_user_percentage(self.username)
 
         elif target_db == "/total":
-            mode = 0
+            self.username = self.Request["Headers"]["Username"]
             if "Target-Asset" in self.Request["Headers"]:
                 self.retrieve_all_dict(self.Request["Headers"]["Target-Asset"])
-            elif "Target-Word" in self.Request["Headers"]:
+            elif (
+                "Target-Word" in self.Request["Headers"]
+                and "Action" not in self.Request["Headers"]
+            ):
                 self.retrieve_translation(self.Request["Headers"]["Target-Word"])
-
-            
+            elif (
+                "Target-Word" in self.Request["Headers"]
+                and "Action" in self.Request["Headers"]
+            ):
+                self.retrieve_definition(self.Request["Headers"]["Target-Word"])
+        elif target_db == "/chatgpt":
+            self.username = self.Request["Headers"]["Username"]
+            if "Action" in self.Request["Headers"]:
+                if self.Request["Headers"]["Action"] == "fake":
+                    self.retrieve_false_word()
+                if self.Request["Headers"]["Action"] == "conversation":
+                    self.retrieve_conversation()
 
     def retrieve_login(self, username):
         db_access = DatabaseAccess(database_dir_path)
@@ -151,7 +187,7 @@ class Server:
     def retrieve_user_percentage(self, username):
         db_access = DatabaseAccess(database_dir_path)
         language = self.Request["Headers"]["Game-Language"]
-        try: 
+        try:
             db_access.calculate_progress(self.username, language)
             result = db_access.retrieve_progress(self.username, language)
             self.Response["Body"] = json.dumps(dict({username: result}))
@@ -163,13 +199,13 @@ class Server:
             self.Response["StatusCode"] = "500"
             self.Response["StatusLine"] = "Internal Server Error"
             print(f"An error occurred: {e}")
-            
-    def retrieve_all_dict(self, category=''):
+
+    def retrieve_all_dict(self, category=""):
         db_access = DatabaseAccess(database_dir_path)
         db_access.groupWordsByCategory()
         result = db_access.getAllWordsFromCategory(category)
         if isinstance(result, list):  # Check if result is a dictionary
-            self.Response["Body"] = json.dumps(dict({category:result}))
+            self.Response["Body"] = json.dumps(dict({category: result}))
             self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
             self.Response["Headers"]["Content-Type"] = "application/json"
             self.Response["StatusCode"] = "200"
@@ -181,10 +217,10 @@ class Server:
     def retrieve_translation(self, word):
         db_access = DatabaseAccess(database_dir_path)
         language = self.Request["Headers"]["Game-Language"]
-        try: 
+        try:
             result = db_access.get_translation(word, language)
 
-            self.Response["Body"] = json.dumps(dict({word:result}))
+            self.Response["Body"] = json.dumps(dict({word: result}))
             self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
             self.Response["Headers"]["Content-Type"] = "application/json"
             self.Response["StatusCode"] = "200"
@@ -194,6 +230,60 @@ class Server:
             self.Response["StatusLine"] = "Internal Server Error"
             print(f"An error occurred: {e}")
 
+    def retrieve_definition(self, word):
+        db_access = DatabaseAccess(database_dir_path)
+        language = self.Request["Headers"]["Game-Language"]
+        try:
+            result = db_access.get_definition(word)
+
+            self.Response["Body"] = result
+            self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
+            self.Response["Headers"]["Content-Type"] = "application/json"
+            self.Response["StatusCode"] = "200"
+            self.Response["StatusLine"] = "OK"
+        except Exception as e:
+            self.Response["StatusCode"] = "500"
+            self.Response["StatusLine"] = "Internal Server Error"
+            print(f"An error occurred: {e}")
+
+    def retrieve_false_word(self):
+        word = self.Request["Headers"]["Target-Word"]
+        language = self.Request["Headers"]["Game-Language"]
+        try:
+            ai = VocabAI()
+            self.Response["Body"] = ai.getFalseWord(language=language, word=word)
+            self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
+            self.Response["Headers"]["Content-Type"] = "text/plain"
+            self.Response["StatusCode"] = "200"
+            self.Response["StatusLine"] = "OK"
+        except Exception as e:
+            self.Response["StatusCode"] = "500"
+            self.Response["StatusLine"] = "Internal Server Error"
+            print(f"An error occurred: {e}")
+
+    def retrieve_conversation(self):
+        word = self.Request["Headers"]["Target-Word"]
+        category = self.Request["Headers"]["Target-Asset"]
+        language = self.Request["Headers"]["Game-Language"]
+        try:
+            ai = VocabAI()
+            result = ai.getConversation(
+                username=self.username, language=language, category=category, word=word
+            )
+
+            self.Response["Body"] = json.dumps(dict({word: result}))
+            self.Response["Headers"]["Content-Length"] = str(len(self.Response["Body"]))
+            self.Response["Headers"]["Content-Type"] = "application/json"
+            self.Response["StatusCode"] = "200"
+            self.Response["StatusLine"] = "OK"
+        except Exception as e:
+            self.Response["StatusCode"] = "500"
+            self.Response["StatusLine"] = "Internal Server Error"
+            print(f"An error occurred: {e}")
+
+    """
+    update functions are used to write to database. Use with cautions. 
+    """
     def update_data(self):
         """
         Setter function for all database access. May consist sensitive data. Will alter database.
@@ -239,6 +329,9 @@ class Server:
                 self.Response["StatusLine"] = "Internal Server Error"
                 self.Response["Body"] = "update_user_dictionary() failed"
 
+    """
+    toggle functions are alternatives to update funcstion. They are used when the user only updates one field in the database. 
+    """
     def toggle_data(self):
         """
         Quick access function to database. Should not consist sensitive data. Database will only be altered in a specific field.
@@ -247,11 +340,11 @@ class Server:
         self.username = self.Request["Headers"]["Username"]
         if self.Request["URI"] == "/progress":
             action = self.Request["Headers"]["Action"]
-            if action == 'learn':
+            if action == "learn":
                 self.toggle_learn(self.username)
-            elif action == 'proficiency up':
+            elif action == "proficiency up":
                 self.toggle_proficiency(self.username, 1)
-            elif action == 'proficiency down':
+            elif action == "proficiency down":
                 self.toggle_proficiency(self.username, -1)
 
     def toggle_learn(self, username):
@@ -279,7 +372,10 @@ class Server:
             self.Response["StatusCode"] = "500"
             self.Response["StatusLine"] = "Internal Server Error"
             self.Response["Body"] = "alter_proficiency() failed"
-            
+
+    """
+    Dispatcher for server jobs. 
+    """
     def process_request(self):
         if self.Request["Method"] == "GET":
             if self.debugMode:
@@ -310,32 +406,30 @@ class Server:
             self.Response["StatusCode"] = "501"
             self.Response["StatusLine"] = "Not Implemented"
 
+    '''
+    Entry point for Server instance. 
+    '''
     def run(self):
         state = "RECV"
-
         while True:
             if state == "RECV":
                 self.recv_request()
                 state = "PROCESS"
-
             elif state == "PROCESS":
                 # Process the request here
-
                 self.process_request()
                 state = "SEND"
-
             elif state == "SEND":
                 response = self.compose_response()
                 self.socket.sendall(response.encode("utf-8"))
                 state = "CLOSE"
-
             elif state == "CLOSE":
                 self.socket.shutdown(socket.SHUT_RDWR)
                 # self.socket.close()
                 break
             else:  # invalid state
                 break
-        
+
         return self.username
 
 

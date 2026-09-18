@@ -51,3 +51,23 @@ each new learned word gets added to the user dictionary
 05/01/2024:
 
 fixed the bug by sending language back to the map from the category
+
+05/02/2024:
+
+made the translations work for each category
+
+05/08/2024;
+
+made the dictionary work with images
+
+05/09/2024:
+
+Got the Type question functionality fully working
+
+05/14/2024:
+
+Got the Multiple Choice question functionality fully working
+
+05/15/2024:
+
+Got the timer working and its based on the difficulty level the user chooses.

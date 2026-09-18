@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 import schoolImage from '../../assets/School.png'; 
 import artistImage from '../../assets/Artist.png'; 
@@ -14,8 +16,8 @@ import tailorHLImage from '../../assets/TailorHL.png';
 
 
 import menuBarImage from '../../assets/MenuBar.png'; 
-import dictionaryImage from '../../assets/DictionaryTab.png'; 
-import menuImage from '../../assets/MenuTab.png'; 
+import dictionaryImage from '../../assets/DictionaryTabSHORT.png'; 
+import menuImage from '../../assets/MenuTabSHORT.png'; 
 
 import './MapPage.css';
 import DictionaryPopup from '../../components/dictionary/DictionaryPopup';
@@ -32,11 +34,45 @@ const Map = function() {
     const navigate = useNavigate(); 
     // const goToSchool =() => {navigate('/school');}
 
+    const location = useLocation();
+    const username = location.state.username;
+    const selectedLanguage = location.state.language;
+
+
+
+
+    const [userDictionary, setUserDictionary] = useState(null);
+    const [numberOfLearnedWords, setNumberOfLearnedWords] = useState(0);
+
+    const getTheUserInformation = async (username, language) => {
+        try {
+            const result = await gameClient.getUserDictionary(username, language);
+            return result;
+        } catch (error) {
+            return { status: 'error', message: 'An error occurred during login. Please try again.' };
+        }
+      }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const result = await getTheUserInformation(username, selectedLanguage);
+            setUserDictionary(result);
+            if (result) {
+                setNumberOfLearnedWords(Object.keys(result).length);
+            }
+        }
+        fetchData();
+    }, [username, selectedLanguage]);
+
+
+
+
 
     // Navigate to the Artist component with the username as a prop
     const goToSchool = () => {
         // navigate('/artist', { state: { username } });
         navigate('/school', { state: { username, language: selectedLanguage } });
+
 
     };
     // Navigate to the Artist component with the username as a prop
@@ -73,18 +109,23 @@ const Map = function() {
     // Navigate to the Artist component with the username as a prop
     const goToOutskirts = () => {
         // navigate('/artist', { state: { username } });
-        navigate('/outskirts', { state: { username, language: selectedLanguage } });
+        // navigate('/outskirts', { state: { username, language: selectedLanguage } });
 
+        if (numberOfLearnedWords >= 10) {
+            navigate('/outskirts', { state: { username, language: selectedLanguage } });
+        } else {
+            alert("You must learn at least 10 words before you can go to the Outskirts.");
+        }
     };
 
 
     // const goToTailor =() => {navigate('/tailor');}
 
-    const goToMenu =() => {navigate('/home')};
+    const goToMenu =() => {
+        navigate('/language', { state: { username } });
 
-    const location = useLocation();
-    const username = location.state.username;
-    const selectedLanguage = location.state.language;
+    };
+
 
 
     const [isSchoolHovered, setIsSchoolHovered] = useState(false);
@@ -133,11 +174,9 @@ const Map = function() {
         setIsTailorHovered(false);
     };
 
-    console.log("language", selectedLanguage);
-
 
     return(  
-        <body className = "mapbackground">
+        <div className = "mapbackground">
 
             
             < form action ="">
@@ -147,7 +186,7 @@ const Map = function() {
                     </button>
                     <p className = "descTxt">Learn about Colors</p>
                 </div>
-                <div class = "mapbtndiv" id = "outskirts">
+                <div className = "mapbtndiv" id = "outskirts">
                     <button type= "button" id= "outskirtsimg" onClick={goToOutskirts} onMouseEnter={handleOutskirtsMouseEnter} onMouseLeave={handleOutskirtsMouseLeave}>
                         <img src={isOutskirtsHovered ? outskirtsHLImage : outskirtsImage} />
                     </button>
@@ -195,7 +234,7 @@ const Map = function() {
               
             </DictionaryPopup>
             
-        </body>
+        </div>
 
      );
 };

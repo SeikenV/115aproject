@@ -55,3 +55,18 @@ Non-reproducible error detected. Shall not affect functionalities, debugging pos
 Supports getting all words by category, get translation, and get progress percentage. 
 Server can host front end from now. 
 Maintaining cloud server. Responding to bug report. 
+
+2024/05/09: 
+Implemented Weighted Randomizer for getting one word from user's learned word. 
+Implemented multiple choice generator using ChatGPT API. 
+Using AES-128 CBC to encrypt OpenAI API Key. 
+
+2024/05/15: 
+Migrated ChatGPT compatibility to backend. 
+Improved randomizer with difficulty parameter. 
+Working on AI generated conversations. 
+
+2024/05/31: 
+Added local caching mechanism to improve performance. 
+Refactored multiple choice mode. 
+Migrated to a better server for final demo. 

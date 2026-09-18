@@ -3,7 +3,19 @@
     border: none;
     cursor: pointer;
   }
-  
+  .definition-container, .definition-container2{
+    position: absolute;
+    bottom: 100px; /* Places the definition near the bottom of the popup */
+    left: 0;
+    right: 0;
+    text-align: center;
+
+    height: 80px; /* Set a fixed height for the definition container */
+
+    max-width: 90%; /* Limit the width to 90% of the popup width */
+    margin: 0 auto; /* Center the container horizontally */
+    
+  }
   .popup {
     position: relative;
     top: 0;
@@ -154,45 +166,71 @@
 .welcome-user {
   position: absolute;
   top: 10px; /* Adjust the top position as needed */
-  left: 20px; /* Adjust the left position as needed */
-  transform: scale(1);
+  left: 25px;
+  color:rgb(71, 51, 60);
+
 }
 
 
 .learned-words1 {
   position: absolute;
-  top: 70px; /* Adjust the top position as needed */
+  height:80%;
+  width: 90%;
+  top: -10px; /* Adjust the top position as needed */
   left: 20px; /* Adjust the left position as needed */
   transform: scale(1);
+  display:flex;
+  justify-content: center;
+  text-align: center;
+  padding-top: 10%;
+  color:rgb(71, 51, 60);
 }
 
 .learned-words2 {
   position: absolute;
-  top: 70px; /* Adjust the top position as needed */
+  height:80%;
+  width: 90%;
+  top: -10px; /* Adjust the top position as needed */
   left: 20px; /* Adjust the left position as needed */
   transform: scale(1);
+  display:flex;
+  justify-content: center;
+  text-align: center;
+  padding-top: 10%;
+  color:rgb(71, 51, 60);
 }
 
-
+.word-info{
+  padding-top: 3%;
+}
+.word-info2{
+  padding-top: 3%;
+}
 
 #wordImage1 {
-  position: absolute;
-  height: 66%;
-  top: 5%;
-  left: -30%;
-  transform: translateX(0px) translateY(30px) scale(0.6);
-  display: flex;
-  justify-content: center;
+  position: relative;
+  width:70%;
+  margin-top: 8px;
 }
 
+.definition-container{
+  bottom: 15%;
+  padding:none;
+  height:10%;
+  color:rgb(71, 51, 60);
+}
 
+.definition-container2{
+  bottom: 15%;
+  padding:none;
+  height:10%;
+  color:rgb(71, 51, 60);
+}
 
 #wordImage2 {
-  position: absolute;
-  height: 66%;
-  top: 5%;
-  left: 80px; 
-  display: flex;
-  justify-content: center;
+  position: relative;
+  width:70%;
+  margin-top: 8px;
+  
 }
 

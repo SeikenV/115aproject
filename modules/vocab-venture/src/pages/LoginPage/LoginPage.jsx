@@ -1,25 +1,38 @@
-// import React from 'react';
 import './LoginPage.css';
-// import React, { useEffect } from 'react'; // Import useEffect from react
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom/dist';
 
+/**
+ * LoginPage Component.
+ * 
+ * The login page for the Vocab Venture application.
+ * Allows users to enter their username and password to log in.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 const LoginPage = function() {
-    const navigate = useNavigate();
-    const goToMainPage =() => {navigate('/home')};
-    // const goToLanguage =() => {navigate('/language');}
 
-
+    // State for login status
     const [loginStatus, setLoginStatus] = useState(null);
+    // State for error message
     const [errorMsg, setErrorMsg] = useState('');
 
     
+    const navigate = useNavigate();
 
+    // Navigate back to home page
+    const goToMainPage =() => {navigate('/home')};
+    // Navigate to selecting language page
     const goToLanguage = () => {
         const username = document.getElementById('username').value;
         navigate('/language', { state: { username } });
     };
 
+    
+    /*
+    * The useEffect checks if the username and password are valid by calling handleLogin().
+    * It gives an error message if the username and password are not valid.
+    */
     useEffect(() => {
         const submitLoginElement = document.getElementById('submit-login-id');
         if (submitLoginElement) {
@@ -27,14 +40,12 @@ const LoginPage = function() {
                 handleLogin().then((result) => {
                     // Handle the result of the login attempt
                     if (result.status === 'success') {
-                        // setLoginStatus('success');
                         goToLanguage();
                     } else {
                         setLoginStatus('failed');
                         setErrorMsg(result.message);
                     }
                 }).catch((error) => {
-                    console.error('Login error:', error);
                     setErrorMsg('An error occurred during login. Please try again.');
                 });
             });
@@ -44,39 +55,21 @@ const LoginPage = function() {
         }
     }, []);
 
-    // useEffect(() => {
-    //     const submitLoginElement = document.getElementById('submit-login-id');
-    //     if (submitLoginElement) {
-    //         submitLoginElement.addEventListener('click', handleLogin);
-    //         return () => {
-    //             submitLoginElement.removeEventListener('click', handleLogin);
-    //         };
-    //     }
-    // }, []);
-    
-    
-    // useEffect(() => {
-    //     document.getElementById('submit-login-id').addEventListener('click', handleLogin);
-    //     return () => {
-    //         document.getElementById('submit-login-id').removeEventListener('click', handleLogin);
-    //     };
-    // }, );
-    
     return(  
             <div className='wrapper'>
 
                 <form action ="">
                     <h1>Login</h1>
                     <label>Username</label>
-                    <div className= "input-box"> {/*use className= instead of class= for jsx*/}
-                        {/* <input type="text" id = "username" placeholder= 'Username' required/> */}
+                    
+                    <div className= "input-box">
                         <input type="text" id = "username" placeholder='Username' required autoComplete="username" />
                     </div>
-                    <label>Password</label>
-                    <div className="input-box">
-                        {/* <input type= "password" id = "password" placeholder= 'Password' required /> */}
-                        <input type="password" id="password" placeholder='Password' required autoComplete="current-password" />
 
+                    <label>Password</label>
+
+                    <div className="input-box">
+                        <input type="password" id="password" placeholder='Password' required autoComplete="current-password" />
                     </div>
 
                     {errorMsg && <p className="error-msg">{errorMsg}</p>}<br></br>

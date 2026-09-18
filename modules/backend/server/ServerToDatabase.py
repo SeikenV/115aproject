@@ -1,6 +1,8 @@
 import firebase_admin
 import os
 import threading
+from datetime import datetime
+import random
 from firebase_admin import credentials
 from firebase_admin import firestore
 from collections import defaultdict
@@ -21,21 +23,29 @@ class DatabaseAccess:
 
 
     def __init__(self, script_path):
-        unique_name = f"firebaseApp-{threading.get_ident()}"
+        # Current timestamp in a compact format
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        # Generate a random integer
+        random_number = random.randint(1000, 9999)
+
+        # Format the unique name with thread ID, timestamp, and random number
+        self.unique_name = f"firebaseApp-{threading.current_thread().ident}-{timestamp}-{random_number}"
         # print(f"Firebase instance {unique_name} created")
         self.cred = credentials.Certificate(script_path + '/cfg/dbaccess.json')
-        self.firebase_app  = firebase_admin.initialize_app(self.cred, name=unique_name)
+        self.firebase_app  = firebase_admin.initialize_app(self.cred, name=self.unique_name)
         self.db = firestore.client(self.firebase_app)
 
         #the collection we are under is the users collection on Firestore
         self.collection_name = 'users'
 
         self.categoryData = defaultdict(list)
+        print(datetime.now(), f" - Firebase App: {self.unique_name} created")
         
 
     def __del__(self):
         # Clean up Firebase app on object destruction
         firebase_admin.delete_app(self.firebase_app)
+        print(datetime.now(), f" - Firebase App: {self.unique_name} deleted")
 
         
     def request_login(self, username, password):
@@ -209,6 +219,34 @@ class DatabaseAccess:
         except Exception as e:
             print(f"An error occurred while retrieving the translation: {e}")
             return None
+    
+    def get_definition(self, word):
+        #input param is just word, since the definition retrieved is just in english
+        #input is just the English word
+        try:
+            # Reference to the document containing the word's translations
+            word_ref = self.db.collection('totalWords').document(word)
+            word_doc = word_ref.get()
+
+            if not word_doc.exists:
+                print(f"No translation found for the word: {word}")
+                return None
+
+            # Extract the word data
+            word_data = word_doc.to_dict()
+        
+            # Check and return the translation based on the specified language
+            definition = word_data.get('definition')
+            if definition:
+                return definition
+            else:
+                print(f"There is no definition for the word.")
+                return None
+
+        except Exception as e:
+            print(f"An error occurred while retrieving the translation: {e}")
+            return None
+
 
     def update_user_dictionary(self, username, language, new_dict):
         """
@@ -241,7 +279,7 @@ class DatabaseAccess:
             #print("This is the type:", type(field_value))
             
             #only update if it is within the bounds
-            if 0 <= (field_value[word] + action) <= 10:
+            if 0 < (field_value[word] + action) < 10:
                 field_value[word] = field_value[word] + action
             doc_ref.update({language: field_value})
             return self.SUCCESSFUL
@@ -332,7 +370,8 @@ if __name__ == '__main__':
     #print(test.retrieve_progress('TestApril232ndUser', 'french'))
     #print(test.learn_new_word('TestApril232ndUser', 'french', 'testword55'))
 
-    print(test.get_translation('bird', 'spanish'))
+    #print(test.get_translation('bird', 'spanish'))
+    print(test.get_definition('stadium'))
 
 
 

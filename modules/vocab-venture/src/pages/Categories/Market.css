@@ -14,12 +14,13 @@
 
 #foodImage{
     position:absolute;
-   
-
-    width:17vw;
+    height: 40%;
     /* height:30vh; */
-    top: 7%;
+    top: 10%;
+    left: 12%;
 
     display:flex;
     justify-content: center;
+    z-index: 999; /* Ensure this value is higher than other elements */
+
 }

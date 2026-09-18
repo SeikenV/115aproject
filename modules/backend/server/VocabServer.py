@@ -1,35 +1,10 @@
 #!/usr/bin/env python3
-
-# pre-condition validations
-# check python packages
-import subprocess
-import pkg_resources
-import sys
 import os
 import shutil
 
 script_path = os.path.abspath(__file__)
 server_dir_path = os.path.dirname(script_path)
 database_dir_path = os.path.dirname(server_dir_path) + "/database"
-
-
-def install_package(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-
-def check_and_install(package):
-    try:
-        pkg_resources.get_distribution(package)
-    except pkg_resources.DistributionNotFound:
-        print(f"{package} not found, installing...")
-        install_package(package)
-    else:
-        print(f"{package} is already installed")
-
-
-packages = ["pyzipper", "firebase", "firebase-admin"]
-for package in packages:
-    check_and_install(package)
 
 # decrypt credentials
 import pyzipper
