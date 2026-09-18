@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+import spriteSheet from '../../../assets/outskirts-assets/SpriteSheetCat.png';
 
 const CatSprite = function() {
     const[frame, setFrame] = useState(0);
@@ -5,15 +7,15 @@ const CatSprite = function() {
     const spriteStyle = {
         width: '600px',
         height: '600px',
-        backgroundImage: '../../assets/outskirts-assets/SpriteSheetCat.png.PNG', /* URL of your sprite sheet */
-        backgroundPosition: '-${frame * 600}px 0px`'
+        backgroundImage: `url(${spriteSheet})`, /* URL of your sprite sheet */
+        backgroundPosition: `-${frame * 600}px 0px`
     };
     const animateSprite = () => {
         setFrame((frame + 1) % 4); // Assuming 4 frames in the sprite sheet
       };
     
       // Start the animation when the component mounts
-      React.useEffect(() => {
+      useEffect(() => {
         const interval = setInterval(animateSprite, 1000); // Change the interval according to your animation speed
         return () => clearInterval(interval);
       }, []);
