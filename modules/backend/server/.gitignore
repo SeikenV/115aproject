@@ -1,2 +1,6 @@
 .env
 __pycache__/
+
+# Runtime output captured from the server (also leaked host paths/IPs)
+log_*.txt
+logs/
