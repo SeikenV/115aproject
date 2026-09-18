@@ -21,3 +21,7 @@ logs/
 # Environment variables
 .env
 .env.local
+
+# Secrets: never commit credential archives or keys
+credential*.zip
+cfg/

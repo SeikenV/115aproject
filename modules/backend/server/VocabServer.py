@@ -17,8 +17,19 @@ def extract_protected_zip(zip_filename, password, extract_to="."):
         zf.extractall(path=extract_to)
 
 
-zip_file = database_dir_path + "/" + "credential.zip"
-password = "arichinmaychristophermingweivenkatesh"
+# The credential archive and its password are deliberately NOT committed.
+# Supply them outside the repository so secrets never land in version control:
+#   CREDENTIAL_ZIP          - path to the AES-protected zip (default: database/credential.zip)
+#   CREDENTIAL_ZIP_PASSWORD - password used to extract it
+zip_file = os.environ.get("CREDENTIAL_ZIP", database_dir_path + "/" + "credential.zip")
+password = os.environ.get("CREDENTIAL_ZIP_PASSWORD")
+if not password:
+    raise SystemExit(
+        "Refusing to start: set CREDENTIAL_ZIP_PASSWORD in the environment "
+        "(the old hardcoded password was removed from version control)."
+    )
+if not os.path.exists(zip_file):
+    raise SystemExit(f"Refusing to start: credential archive not found at {zip_file}")
 extract_protected_zip(zip_file, password, database_dir_path + "/cfg")
 print("Credential decrypted.")
 
