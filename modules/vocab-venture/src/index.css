@@ -54,7 +54,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-image: url('assets/BkgrTest.PNG'); /* Path to your image */
+    background-image: url('assets/BkgrTest.png'); /* Path to your image */
     background-position: center; /* Center the background image */
     background-repeat: no-repeat; /* Do not repeat the image */
 
