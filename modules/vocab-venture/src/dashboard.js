@@ -1,5 +1,7 @@
 const gameClient = new GameClient();
+// import GameClient from '../client/gameClient.js';
 
+// const gameClient = new GameClient();
 
 document.addEventListener('DOMContentLoaded', function () {
     const frontContainer = document.getElementById('front-container');
@@ -151,24 +153,4 @@ const handleRegister = async () => {
     //         console.error('Register error:', error);
     //         errorMsg.textContent = 'An error occurred during register. Please try again.';
     //     });
-}
-
-function startGame() {
-    // Include the Phaser library
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js';
-    document.head.appendChild(script);
-
-    // Initialize the Phaser game once the library is loaded
-    script.onload = () => {
-        const gameConfig = {
-            type: Phaser.AUTO,
-            width: 800,
-            height: 600,
-            // Phaser game scenes and other configurations
-        };
-
-        const game = new Phaser.Game(gameConfig);
-        // Additional game setup if needed
-    };
 }

@@ -1,5 +1,5 @@
-// const GameClient = require('./gameClient.js');  // Adjust the path to where your GameClient class is defined
-import GameClient from './gameClient.js'; // Adjust the path as needed
+const GameClient = require('./gameClient.js');  // Adjust the path to where your GameClient class is defined
+// import GameClient from './gameClient.js'; // Adjust the path as needed
 
 async function testGetUserDictionary() {
     const username = "LanguageUserTest3";
@@ -78,17 +78,32 @@ async function test_getTranslation() {
         console.error('Error during test:', error);
     }
 }
-async function test_getUserQuiz(){
+async function test_getQuestionWord(difficulty) {
     const username = "TestApril232ndUser";
     const language = "spanish";
     const client = new GameClient();
     try {
-        const result = await client.getUserQuiz(username, language);
+        const result = await client.getQuestionWord(username, language, difficulty);
         console.log(`test_getUserQuiz()\'s result: ${result}`);
     } catch (error) {
         console.error('Error during test:', error);
     }
 }
+
+async function test_getMultipleChoice() {
+    const username = "TestApril232ndUser";
+    const language = "spanish";
+    const client = new GameClient();
+    try {
+        const word = await client.getQuestionWord(username, language, difficulty = 3);
+        const result = await client.getMultipleChoice(username, language, word);
+        console.log(`test_getFourChoices()\'s result: ${result[1]}`);
+        console.log(`The correct answer is ${result[1][result[0]]}`);
+    } catch (error) {
+        console.error('Error during test:', error);
+    }
+}
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -104,7 +119,24 @@ function sleep(ms) {
 // sleep(10000);
 // test_getProgressPercentage();
 
-test_getUserQuiz();
-for (let i = 0; i < 10; i++){
-    await test_getUserQuiz();
-}
+// test_getWordQuestion(2);
+// console.log("High random");
+// for (let i = 0; i < 20; i++){
+//     test_getQuestionWord(0);
+// }
+// console.log("Weighted");
+// for (let i = 0; i < 20; i++){
+//     test_getQuestionWord(1);
+// }
+// console.log("More weighted");
+// for (let i = 0; i < 20; i++){
+//     test_getQuestionWord(2);
+// }
+// console.log("Focused");
+// for (let i = 0; i < 20; i++){
+//     test_getQuestionWord(3);
+// }
+test_getMultipleChoice();
+// for (let i = 0; i < 10; i++) {
+//     test_getMultipleChoice();
+// }

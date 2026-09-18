@@ -1,5 +1,5 @@
 
-body.mapbackground {
+.mapbackground {
   font-family: 'Popins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-fond-smoothing: grayscale;
@@ -28,14 +28,9 @@ body.mapbackground {
 
 button[type="button"] img {
   width: 20vw;
-  height: auto; /* Maintain aspect ratio */
+  height: auto; 
 }
 
-
-
-
-
-/* Hover effect */
 button[type="button"]:hover img {
   transform: scale(1.1);
 }
@@ -154,16 +149,12 @@ button[type="button"]:hover img {
 }
 
 .mapbtndiv{
-
   position: absolute;
   display:flex;
   flex-direction: column;
   width: 20%;
   align-items: center;;
 }
-
-
-
 
 
 
@@ -184,24 +175,16 @@ button[type="button"]:hover img {
 }
 
 
-
-
-
 #dictionaryimg {
   position: absolute;
-  top: 73%; 
-  left: 32%; 
-  
-  border: none;  
+  bottom:1.8vw;
+  left: 27%; 
+  transform-origin: bottom;
+  transform: scale(0.5); 
   background-color: transparent; 
   padding: 0; 
-
-
   width: 20%;
-  height: 32%;
-  transform: scale(0.5); 
-
-
+  height: 20%;
 }
 
 #dictionaryimg img {
@@ -209,37 +192,26 @@ button[type="button"]:hover img {
   max-height: 300px;
 }
 
-
 #dictionaryimg img:hover {
   transform: scale(1.1); 
 }
 
-
-
 #menuimg {
-
-
   position: absolute;
-  top: 67%; 
-  left: 42%; 
-  
-  border: none;  
-  background-color: transparent; 
+  bottom:1vw;
+  left:38%;
   padding: 0; 
-
-
+  background:transparent;
   width: 20%;
-  height: 46%;
-  transform: scale(0.4); 
-
+  height: 30%;
+  transform-origin: bottom;
+  transform: scale(0.37); 
 }
 
 #menuimg img {
   max-width: 300px;
   max-height: 300px;
 } 
-
-
 
 #menuimg img:hover {
   transform: scale(1.1); 

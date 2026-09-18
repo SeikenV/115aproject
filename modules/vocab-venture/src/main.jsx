@@ -13,6 +13,16 @@ import ArtistPage from "./pages/Categories/Artist";
 import MarketPage from "./pages/Categories/Market";
 import OutskirtsPage from "./pages/Categories/Outskirts";
 import TailorPage from "./pages/Categories/Tailor";
+import TypePage from "./components/combatPopups/Type";
+import MCPage from "./components/combatPopups/MultChoice";
+import QuizPage from "./components/combatPopups/Quiz";
+import MatchPage from "./components/combatPopups/Match";
+
+
+import TypeOGPage from "./components/combatPopups/TypeOG";
+import MCOGPage from "./components/combatPopups/MultChoiceOG";
+
+import AfterQuizPage from "./components/combatPopups/afterQuizPage";
 
 export default function App() {
   
@@ -31,6 +41,16 @@ export default function App() {
         <Route exact path= "/market" element={<MarketPage></MarketPage>}/>
         <Route exact path= "/outskirts" element={<OutskirtsPage></OutskirtsPage>}/>
         <Route exact path= "/tailor" element={<TailorPage></TailorPage>}/>
+        <Route exact path= "/type" element={<TypePage></TypePage>}/>
+        <Route exact path= "/multiplechoice" element={<MCPage></MCPage>}/>
+        <Route exact path= "/quiz" element={<QuizPage></QuizPage>}/>
+        <Route exact path= "/match" element={<MatchPage></MatchPage>}/>
+
+        <Route exact path= "/typeOG" element={<TypeOGPage></TypeOGPage>}/>
+        <Route exact path= "/multiplechoiceOG" element={<MCOGPage></MCOGPage>}/>
+        <Route exact path= "/afterquizpage" element={<AfterQuizPage></AfterQuizPage>}/>
+
+
 
 
         </Routes>

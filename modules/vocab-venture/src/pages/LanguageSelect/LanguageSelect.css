@@ -1,0 +1,10 @@
+/* 
+h1 {
+    max-width: 90%;
+} */
+
+
+.username-container {
+    /* max-width: 90%; */
+    word-wrap: break-word;
+}

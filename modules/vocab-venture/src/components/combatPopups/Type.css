@@ -1,0 +1,64 @@
+.type-container{
+  width: 100%;
+  height: 100%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.typeCONTENT{
+  background-image: url('../../assets/artist-assets/Contentbox.png');
+  background-size:cover;
+  position:absolute;
+  width:30%;
+  height: 75%;
+  top:5%;
+  justify-content: center;
+  padding-top: 50px;
+  
+}
+
+.timer{
+  position:absolute;
+  left:20px;
+  top:20px;
+}
+.type-image-container {
+  position:absolute;
+  width:100%;
+  justify-content:center;
+  height: 70%;
+  text-align: center;
+  
+}
+.type-image-container img{
+  height: 80%;
+}
+.type-image{
+   width:100%;
+}
+
+.type-word-info{
+  bottom:0;
+  position:absolute;
+  width:100%;
+  height: 30%;
+  align-content: center;
+  text-align: center;
+}
+
+.message-display {
+  z-index: 4;
+  position: absolute;
+  top: 10px; /* Adjust the distance from the top as needed */
+  right: 10px; /* Adjust the distance from the right as needed */
+  background-color: white;
+  padding: 10px; /* Add padding for better readability */
+  border: 1px solid #ccc; /* Optional: Add a border for better visibility */
+  border-radius: 5px; /* Optional: Add rounded corners */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+  z-index: 1000; /* Ensure it is above other elements */
+  font-family: Arial, sans-serif; /* Optional: Set a font family */
+  font-size: 50px; /* Optional: Set a font size */
+  color: #333; /* Optional: Set the text color */
+}

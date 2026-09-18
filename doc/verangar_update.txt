@@ -38,3 +38,20 @@ Fixed learn_words function to not allow duplicate learned words
 2024/05/01:
 
 Fixed status code being returned in retrieve_progress() function
+
+2024/05/09:
+
+Added basic multiple choice functionality in frontend for battle mode
+
+2024/05/13:
+
+Added functionality for MCQ feature, needs reworking possibly with GPT API?
+Reworked incorrect answer choices to be done through GPT API
+
+2024/05/23:
+
+Added get_definition() function to query the defintion for a chosen word from Firestore DB
+
+2024/05/23:
+
+Added definitions to dictionary front end, updated DictionaryPopup and Dictionary.css

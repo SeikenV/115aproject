@@ -1,0 +1,272 @@
+.timer{
+  z-index:3;
+  position:absolute;
+  color:rgb(102, 73, 91);
+  border:dashed;
+  border-color: rgb(228, 191, 171);
+  padding: 5px;
+  background-color: rgba(250, 235, 215, 0.907);
+}
+.ready-go-display{
+  z-index:10;
+  position:absolute;
+  border:dashed;
+  border-color: rgb(228, 191, 171);
+  border-width: 6px;
+  color:rgb(102, 73, 91);
+  display:flex;
+  justify-content:center;
+  text-align: center;
+  align-content: center;
+
+
+  width: 40%; /* Increased from 30% */
+  padding: 7%; /* Increased from 5% */
+  left: 30%; /* Adjusted left position */
+  top: 15%; /* Adjusted top position */
+  font-size: xx-large; /* Increased font size */
+  /* width: 20%;
+  padding: 3%;
+  left: 41%; */
+  /* top: 20%;
+  font-size: x-large; */
+  background-color: antiquewhite;
+}
+#goToMapButton{
+  z-index:3;
+
+  position: absolute;
+}
+
+.isCorrect-display{
+  padding:1%;
+  z-index: 3;
+  position: absolute;
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+  background-color: antiquewhite;
+  font-family: Arial, sans-serif; /* Optional: Set a font family */
+  font-size: 50px; /* Optional: Set a font size */
+  color:rgb(102, 73, 91);
+  top: 5%;
+  right:45%;
+
+}
+.coverUpBG{
+    z-index: 2;
+    background-image: url('../../assets/outskirts-assets/BkgrTest.png'); 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display:flex;
+    background-size: cover;
+
+    bottom:0;
+    left:0;
+}
+.combatBackground {
+    top:0;
+    left:0;
+    font-family: 'Popins', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-fond-smoothing: grayscale;
+    display: flex;
+    background-image: url('../../assets/BkgrTest.png'); 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    position: absolute;
+    width: 100vw;
+    height:100vh;
+    background-size: cover;
+    font-family: 'roboto', sans-serif;
+    justify-content: center;
+    align-items: center;
+    overflow:hidden;
+  } 
+  #goToTypeButton{
+    position: absolute;
+    width: 10%;
+    right:0;
+    bottom:0;
+
+  } 
+
+  .Effects{
+    z-index: 2;
+    display:flex;
+    position:absolute;
+    width: 1300px; /* Width of each frame */
+    height: 1300px; /* Height of each frame */
+    transform:scale(.5);
+    overflow: hidden;
+    bottom: -30%;
+    left:5%;
+  
+  }
+
+  .SpriteOpp{
+    z-index:3;
+    display:flex;
+    position:absolute;
+    width: 1300px; /* Width of each frame */
+    height: 1300px; /* Height of each frame */
+    transform-origin: bottom;
+    bottom: 15%;
+    left:35%;
+    transform:scale(.18);
+
+    overflow: hidden;
+
+  }
+  
+  .Sprite {
+    z-index:3;
+    display:flex;
+    position:absolute;
+    width: 600px; /* Width of each frame */
+    height: 600px; /* Height of each frame */
+    transform:scale(.5);
+    bottom: -43px;
+    left: -100px;
+    overflow: hidden;
+ }
+
+.start-btn{
+  width: 8vw;
+  position:absolute;
+  justify-self: center;
+  align-self: center;
+  align-items: center;
+  text-align: center;
+  font-size: large;
+  height: 5vh;
+
+  display:flex;
+  z-index:3;
+}
+.catHitSS{
+    animation: playHIT 1s steps(4) normal forwards;
+}
+  @keyframes playHIT {
+    from {
+      transform: translate3d(0px,0,0);
+    }
+    to {
+      transform: translate3d(-100%,0,0); /* Total width of sprite sheet (100px * 4 frames) */
+    }
+ }
+
+ .catAttackSS{
+  animation: playATTACK 1s steps(4) normal forwards;
+}
+@keyframes playATTACK {
+  from {
+    transform: translate3d(0px,0,0);
+  }
+  to {
+    transform: translate3d(-100%,0,0); /* Total width of sprite sheet (100px * 4 frames) */
+  }
+}
+
+.incorrectEffect1SS{
+  animation: playIncorrectEffect1 .8s steps(6) normal forwards;
+  
+}
+@keyframes playIncorrectEffect1 {
+  from {
+    transform: translate3d(0px,0,0);
+  }
+  to {
+    transform: translate3d(-100%,0,0); /* Total width of sprite sheet (100px * 4 frames) */
+  }
+}
+.correctEffect3SS{
+  animation: playCorrectEffect3 .8s steps(5) normal forwards;
+  
+}
+@keyframes playCorrectEffect3 {
+  from {
+    transform: translate3d(0px,0,0);
+  }
+  to {
+    transform: translate3d(-100%,0,0); /* Total width of sprite sheet (100px * 4 frames) */
+  }
+}
+
+.correctEffect2SS{
+  animation: playCorrectEffect2 .8s steps(5) normal forwards;
+  
+}
+@keyframes playCorrectEffect2 {
+  from {
+    transform: translate3d(0px,0,0);
+  }
+  to {
+    transform: translate3d(-100%,0,0); /* Total width of sprite sheet (100px * 4 frames) */
+  }
+}
+
+.correctEffect1SS{
+    animation: playCorrectEffect1 .8s steps(5) normal forwards;
+    
+  }
+  @keyframes playCorrectEffect1 {
+    from {
+      transform: translate3d(0px,0,0);
+    }
+    to {
+      transform: translate3d(-100%,0,0); /* Total width of sprite sheet (100px * 4 frames) */
+    }
+}
+
+
+.slimeHitSS{
+  animation: playSlimeHIT 1s steps(4) normal forwards;
+  
+}
+@keyframes playSlimeHIT {
+  from {
+    transform: translate3d(0px,0,0);
+  }
+  to {
+    transform: translate3d(-100%,0,0); /* Total width of sprite sheet (100px * 4 frames) */
+  }
+}
+.slimeAttackSS{
+  animation: playSlimeATTACK 1s steps(4) normal forwards;
+
+}
+@keyframes playSlimeATTACK {
+  from {
+    transform: translate3d(0px,0,0);
+  }
+  to {
+    transform: translate3d(-100%,0,0); /* Total width of sprite sheet (100px * 4 frames) */
+  }
+}
+.slimeSS{
+  animation: slimeIdle 1s steps(4) infinite;
+}
+@keyframes slimeIdle {
+  from {
+    transform: translate3d(0px,0,0);
+  }
+  to {
+    transform: translate3d(-100%,0,0); /* Total width of sprite sheet (100px * 4 frames) */
+  }
+}
+
+.catSS{
+    animation: playSprite 1s steps(4) infinite;
+}
+  @keyframes playSprite {
+    from {
+      transform: translate3d(0px,0,0);
+    }
+    to {
+      transform: translate3d(-100%,0,0); /* Total width of sprite sheet (100px * 4 frames) */
+    }
+  }

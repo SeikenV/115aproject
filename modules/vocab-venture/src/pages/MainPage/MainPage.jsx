@@ -1,17 +1,24 @@
-//a front page with info about the program
-//prompts user to login or register
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom/dist';
 import './MainPage.css';
-//NOTE: must change .png to in filename or will cause error
 import logo from '../../assets/MainPageCatLined.png';
 
-//let the register and login buttons go to different pages
 
+/**
+ * MainPage Component.
+ * 
+ * The main landing page for the Vocab Venture application.
+ * Provides options to navigate to login or register pages.
+ * 
+ * @returns {JSX.Element} The rendered component.
+ */
 const MainPage = function() {
+    
     const navigate = useNavigate();
+
+    // Navigate to the login page
     const goToLoginPage =() => {navigate('/login')};
+    // Navigate to the register page
     const goToRegisterPage =() => {navigate('/register')};
 
     return(  
@@ -19,16 +26,16 @@ const MainPage = function() {
                 <h1>Vocab Venture</h1>
                 <p>Learn words from different languages</p>
                 <img src= {logo} id= "main-page-cat" className= "center"/>
-                {/* idk how to put MainPageCat.png from assets to right here */}
                     <div id="front-container">
                         <hr/>
                         <h3>Get Started</h3>
+                            {/* Navigate to the login page */}
                             <button id="login-button" onClick= {goToLoginPage}>Login</button>
                             <p>or</p>
+                            {/* Navigate to the register page */}
                             <button id="register-button" onClick= {goToRegisterPage}>Register</button>
                     </div>  
             </div>
- 
      );
 };
 
